@@ -1,0 +1,15 @@
+# Entornos virtuales
+venv/
+env/
+
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Carpetas de compilación de PyInstaller (Temporales y Exe final)
+build/
+dist/
+
+# Archivos de sistema o IDE
+.vscode/
+.idea/
