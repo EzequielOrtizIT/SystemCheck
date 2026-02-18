@@ -1,11 +1,15 @@
 ﻿# Forzamos UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# --- 1. SISTEMA OPERATIVO ---
+# --- 1. SISTEMA OPERATIVO Y SESIÓN (Modificado) ---
 $osInfo = Get-CimInstance Win32_OperatingSystem
+$compInfo = Get-CimInstance Win32_ComputerSystem
 $sysDrive = $osInfo.SystemDrive 
 $sysLetter = $sysDrive.Replace(":", "")
-$osStr = "$($osInfo.Caption) - Ver: $($osInfo.Version) (Instalado en $sysDrive)"
+
+$osStr = "$($osInfo.Caption) - Ver: $($osInfo.Version)"
+$userStr = "$($compInfo.UserName)"  # DOMINIO\Usuario
+$domainStr = "$($compInfo.Domain)"
 
 # --- 2. PLACA BASE ---
 $mobo = Get-CimInstance Win32_BaseBoard
@@ -27,7 +31,7 @@ foreach ($stick in $ramSticks) {
 $ramTextSticks = $ramDetails -join " | "
 $ramStr = "$totalRam GB Total [ $ramTextSticks ]"
 
-# --- 5. VIDEO (Con Fix 64bits) ---
+# --- 5. VIDEO ---
 $gpus = Get-CimInstance Win32_VideoController
 $gpuList = @()
 $regBase = "HKLM:\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}"
@@ -79,39 +83,74 @@ foreach ($disk in $disks) {
 }
 $diskFinalText = $diskDetails -join "`n"
 
-# --- 7. RED AVANZADA (NUEVO) ---
+# --- 7. RED AVANZADA ---
 $netConfig = Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -eq "Up" } | Select-Object -First 1
 
 if ($netConfig) {
     $netAdapter = Get-NetAdapter -InterfaceIndex $netConfig.InterfaceIndex
     $adapterName = $netAdapter.InterfaceDescription
     $macAddress = $netAdapter.MacAddress
-    
-    # Velocidad formateada
     $speedRaw = $netAdapter.LinkSpeed
     if ($speedRaw -like "*Gbps*") { $speedStr = "$speedRaw (Gigabit 🚀)" } 
     elseif ($speedRaw -like "*100 Mbps*") { $speedStr = "$speedRaw (⚠️ Lento)" } 
     else { $speedStr = $speedRaw }
-
     $ipAddress = $netConfig.IPv4Address.IPAddress
     $gateway = $netConfig.IPv4DefaultGateway.NextHop
     $dnsServers = $netConfig.DNSServer.ServerAddresses -join ", "
-
-    # Ping
-    if (Test-Connection -ComputerName 8.8.8.8 -Count 1 -Quiet -ErrorAction SilentlyContinue) { 
-        $pingStr = "✅ Conectado a Internet" 
-    } else { 
-        $pingStr = "❌ Sin Internet" 
-    }
+    if (Test-Connection -ComputerName 8.8.8.8 -Count 1 -Quiet -ErrorAction SilentlyContinue) { $pingStr = "✅ Conectado a Internet" } else { $pingStr = "❌ Sin Internet" }
 } else {
-    $adapterName = "Sin red activa"; $macAddress = "-"; $speedStr = "-"
-    $ipAddress = "-"; $gateway = "-"; $dnsServers = "-"; $pingStr = "❌ Desconectado"
+    $adapterName = "Sin red activa"; $macAddress = "-"; $speedStr = "-"; $ipAddress = "-"; $gateway = "-"; $dnsServers = "-"; $pingStr = "❌ Desconectado"
+}
+
+# --- 8. UPTIME ---
+$boot = $osInfo.LastBootUpTime
+$ahora = Get-Date
+$uptime = $ahora - $boot
+$uptimeStr = "$($uptime.Days) Días, $($uptime.Hours) Hs, $($uptime.Minutes) Min"
+
+# --- 9. SOFTWARE SEGURIDAD (UNIVERSAL) ---
+$avStatus = "No detectado"
+$detectedAVs = @()
+
+# Intento 1: Consultar al Centro de Seguridad (Funciona en Win 10/11 para Defender, Avast, etc.)
+try {
+    $wmiAV = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct -ErrorAction SilentlyContinue
+    foreach ($av in $wmiAV) {
+        $detectedAVs += $av.displayName
+    }
+} catch {}
+
+# Intento 2: Si es un Windows Server o falló lo anterior, buscamos en el Registro (Para Kaspersky/Endpoint)
+if ($detectedAVs.Count -eq 0) {
+    $paths = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*")
+    $regAV = Get-ItemProperty $paths -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -like "*Kaspersky*" -or $_.DisplayName -like "*Endpoint Security*" -or $_.DisplayName -like "*Eset*" }
+    foreach ($k in $regAV) {
+        $detectedAVs += "$($k.DisplayName) (v$($k.DisplayVersion))"
+    }
+}
+
+if ($detectedAVs.Count -gt 0) {
+    # Eliminamos duplicados y unimos
+    $avStatus = ($detectedAVs | Select-Object -Unique) -join " | "
+}
+
+# --- 10. REBOOT PENDING ---
+$pathCBS = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending"
+$pathWU = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired"
+if ((Test-Path $pathCBS) -or (Test-Path $pathWU)) {
+    $rebootStatus = "⚠️ REINICIO PENDIENTE"
+} elseif ($uptime.Days -gt 15) {
+    $rebootStatus = "⚠️ REINICIO RECOMENDADO (Uptime Alto)"
+} else {
+    $rebootStatus = "✅ Estado Saludable"
 }
 
 # --- JSON FINAL ---
 $PCData = @{
+    user=$userStr; domain=$domainStr; av=$avStatus
     cpu=$cpuStr; mobo=$moboStr; ram=$ramStr; vga=$vgaStr; os=$osStr; disk=$diskFinalText
     net_name=$adapterName; net_mac=$macAddress; net_speed=$speedStr
     net_ip=$ipAddress; net_gw=$gateway; net_dns=$dnsServers; net_ping=$pingStr
+    uptime=$uptimeStr; reboot=$rebootStatus
 }
 $PCData | ConvertTo-Json -Compress

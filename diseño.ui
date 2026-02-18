@@ -6,484 +6,224 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>670</height>
+    <width>600</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>580</width>
-    <height>670</height>
+    <width>600</width>
+    <height>750</height>
    </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>580</width>
-    <height>670</height>
-   </size>
-  </property>
-  <property name="acceptDrops">
-   <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Escaner de sistema</string>
+   <string>SystemCheck - Auditor IT</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/* El fondo del panel donde van los controles */
+   <string notr="true">
+/* ESTILO GLOBAL OSCURO */
+QMainWindow {
+    background-color: #2b2b2b;
+}
 QTabWidget::pane { 
     border: 1px solid #444; 
-    background-color: #121212; /* Casi negro */
+    background-color: #1e1e1e; 
 }
-
-/* Las pestañas superiores */
 QTabBar::tab {
     background: #2c2c2c; 
     color: white;
-    padding: 8px 20px;
+    padding: 8px 25px;
     border: 1px solid #444;
-    border-bottom: none; /* Para que se una con el panel */
+    border-bottom: none; 
 }
-
-/* La pestaña que está seleccionada actualmente */
 QTabBar::tab:selected {
-    background: #404040; /* Un poco más claro para destacar */
+    background: #3c3c3c; 
     font-weight: bold;
+    border-bottom: 2px solid #007acc; /* Azul estilo VSCode */
 }
-
-/* Efecto al pasar el mouse por encima */
 QTabBar::tab:hover {
     background: #505050;
-}</string>
+}
+/* CAJAS DE TEXTO: Fondo claro, TEXTO NEGRO FORZADO */
+QLineEdit {
+    padding: 5px;
+    background-color: #e6e6e6;   
+    color: #000000;              
+    border: 1px solid #555;
+    border-radius: 4px;
+    selection-background-color: #007acc;
+}
+QLineEdit[readOnly="true"] {
+    background-color: #dcdcdc;
+    color: #000000;
+}
+/* Etiquetas */
+QLabel {
+    font-weight: bold;
+    color: #eeeeee;
+    margin-top: 5px;
+}
+/* Botones */
+QPushButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #005a9e;
+}
+QPushButton:disabled {
+    background-color: #444;
+    color: #888;
+}
+QTextEdit {
+    background-color: #e6e6e6;
+    color: #000000;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>1</x>
-      <y>1</y>
-      <width>581</width>
-      <height>610</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>100</horstretch>
-         <verstretch>100</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <hintingpreference>PreferFullHinting</hintingpreference>
-        </font>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="tab_1">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>460</height>
-         </size>
-        </property>
-        <attribute name="title">
-         <string>Hardware</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Sistema Operativo:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="input_os">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="cursor">
-              <cursorShape>ArrowCursor</cursorShape>
-             </property>
-             <property name="autoFillBackground">
-              <bool>false</bool>
-             </property>
-             <property name="dragEnabled">
-              <bool>true</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Procesador:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="input_cpu">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Motherboard:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="input_mobo">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Memoria RAM:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="input_ram">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Placa de video:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="input_vga">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Discos:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="txt_disk">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <bold>false</bold>
-               <kerning>true</kerning>
-               <hintingpreference>PreferDefaultHinting</hintingpreference>
-              </font>
-             </property>
-             <property name="verticalScrollBarPolicy">
-              <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Red</string>
-        </attribute>
-        <widget class="QLineEdit" name="input_net_name">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>55</y>
-           <width>559</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-           <kerning>true</kerning>
-           <hintingpreference>PreferDefaultHinting</hintingpreference>
-          </font>
-         </property>
-         <property name="cursor">
-          <cursorShape>ArrowCursor</cursorShape>
-         </property>
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="dragEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_7">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>33</y>
-           <width>559</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Adaptador:</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_8">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>88</y>
-           <width>559</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Direccion MAC:</string>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="input_net_speed">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>165</y>
-           <width>559</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-           <kerning>true</kerning>
-           <hintingpreference>PreferDefaultHinting</hintingpreference>
-          </font>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="input_net_ping">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>275</y>
-           <width>559</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-           <kerning>true</kerning>
-           <hintingpreference>PreferDefaultHinting</hintingpreference>
-          </font>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="input_net_ip">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>220</y>
-           <width>559</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-           <kerning>true</kerning>
-           <hintingpreference>PreferDefaultHinting</hintingpreference>
-          </font>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_10">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>143</y>
-           <width>559</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Velocidad de enlace:</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_11">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>253</y>
-           <width>559</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Estado de internet:</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_12">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>198</y>
-           <width>559</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>IP / Gateway:</string>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="input_net_mac">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>110</y>
-           <width>559</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-           <kerning>true</kerning>
-           <hintingpreference>PreferDefaultHinting</hintingpreference>
-          </font>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </widget>
+   <layout class="QVBoxLayout" name="verticalLayout_main">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_1">
+       <attribute name="title">
+        <string>Inventario y Salud</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          
+          <item>
+           <widget class="QLabel" name="label_user">
+            <property name="text"><string>Usuario / Dominio:</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="input_user">
+            <property name="font"><font><pointsize>11</pointsize></font></property>
+            <property name="readOnly"><bool>true</bool></property>
+            <property name="placeholderText"><string>Esperando escaneo...</string></property>
+           </widget>
+          </item>
+
+          <item>
+           <widget class="QLabel" name="label_av">
+            <property name="text"><string>Seguridad (Antivirus):</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="input_av">
+            <property name="font"><font><pointsize>11</pointsize></font></property>
+            <property name="readOnly"><bool>true</bool></property>
+           </widget>
+          </item>
+
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_status">
+             <item>
+               <layout class="QVBoxLayout" name="vbox_uptime">
+                 <item><widget class="QLabel" name="label_uptime"><property name="text"><string>Tiempo de Actividad:</string></property></widget></item>
+                 <item><widget class="QLineEdit" name="input_uptime"><property name="readOnly"><bool>true</bool></property></widget></item>
+               </layout>
+             </item>
+             <item>
+               <layout class="QVBoxLayout" name="vbox_reboot">
+                 <item><widget class="QLabel" name="label_reboot"><property name="text"><string>Estado de Salud:</string></property></widget></item>
+                 <item><widget class="QLineEdit" name="input_reboot"><property name="readOnly"><bool>true</bool></property></widget></item>
+               </layout>
+             </item>
+           </layout>
+          </item>
+
+          <item><widget class="QLabel" name="label_3"><property name="text"><string>Sistema Operativo:</string></property></widget></item>
+          <item><widget class="QLineEdit" name="input_os"><property name="readOnly"><bool>true</bool></property></widget></item>
+          
+          <item><widget class="QLabel" name="label"><property name="text"><string>Procesador:</string></property></widget></item>
+          <item><widget class="QLineEdit" name="input_cpu"><property name="readOnly"><bool>true</bool></property></widget></item>
+          
+          <item><widget class="QLabel" name="label_2"><property name="text"><string>Motherboard:</string></property></widget></item>
+          <item><widget class="QLineEdit" name="input_mobo"><property name="readOnly"><bool>true</bool></property></widget></item>
+          
+          <item><widget class="QLabel" name="label_5"><property name="text"><string>Memoria RAM:</string></property></widget></item>
+          <item><widget class="QLineEdit" name="input_ram"><property name="readOnly"><bool>true</bool></property></widget></item>
+          
+          <item><widget class="QLabel" name="label_4"><property name="text"><string>Discos:</string></property></widget></item>
+          <item>
+           <widget class="QTextEdit" name="txt_disk">
+            <property name="readOnly"><bool>true</bool></property>
+            <property name="maximumSize"><size><width>16777215</width><height>100</height></size></property>
+           </widget>
+          </item>
+
+         </layout>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btn_scan">
-       <property name="text">
-        <string>Escanear</string>
-       </property>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Red</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_red">
+        <item><widget class="QLabel" name="label_7"><property name="text"><string>Adaptador:</string></property></widget></item>
+        <item><widget class="QLineEdit" name="input_net_name"><property name="readOnly"><bool>true</bool></property></widget></item>
+        
+        <item><widget class="QLabel" name="label_8"><property name="text"><string>Direccion MAC:</string></property></widget></item>
+        <item><widget class="QLineEdit" name="input_net_mac"><property name="readOnly"><bool>true</bool></property></widget></item>
+        
+        <item><widget class="QLabel" name="label_12"><property name="text"><string>IP / Gateway:</string></property></widget></item>
+        <item><widget class="QLineEdit" name="input_net_ip"><property name="readOnly"><bool>true</bool></property></widget></item>
+        
+        <item><widget class="QLabel" name="label_10"><property name="text"><string>Velocidad de enlace:</string></property></widget></item>
+        <item><widget class="QLineEdit" name="input_net_speed"><property name="readOnly"><bool>true</bool></property></widget></item>
+        
+        <item><widget class="QLabel" name="label_11"><property name="text"><string>Estado de internet:</string></property></widget></item>
+        <item><widget class="QLineEdit" name="input_net_ping"><property name="readOnly"><bool>true</bool></property></widget></item>
+        
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation"><enum>Qt::Vertical</enum></property>
+          <property name="sizeHint" stdset="0"><size><width>20</width><height>40</height></size></property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btn_save">
-       <property name="text">
-        <string>Guardar</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <zorder>tabWidget</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>btn_save</zorder>
-   <zorder>btn_scan</zorder>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_scan">
+      <property name="text"><string>Iniciar Auditoría</string></property>
+      <property name="minimumSize"><size><width>0</width><height>45</height></size></property>
+      <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_save">
+      <property name="text"><string>Exportar Reporte (TXT / JSON)</string></property>
+      <property name="minimumSize"><size><width>0</width><height>45</height></size></property>
+      <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>580</width>
-     <height>33</height>
-    </rect>
-   </property>
+   <property name="geometry"><rect><x>0</x><y>0</y><width>600</width><height>22</height></rect></property>
    <widget class="QMenu" name="menuAyuda">
-    <property name="title">
-     <string>Ayuda</string>
-    </property>
-    <addaction name="separator"/>
+    <property name="title"><string>Ayuda</string></property>
     <addaction name="actionacerca"/>
    </widget>
    <addaction name="menuAyuda"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAcerca_de">
-   <property name="text">
-    <string>Ayuda</string>
-   </property>
-  </action>
   <action name="actionacerca">
-   <property name="text">
-    <string>Acerca de...</string>
-   </property>
+   <property name="text"><string>Acerca de...</string></property>
   </action>
  </widget>
  <resources/>
