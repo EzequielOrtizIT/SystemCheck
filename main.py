@@ -126,10 +126,17 @@ class MiApp(QMainWindow):
         if self.input_av: 
             av = data.get("av", "No detectado")
             self.input_av.setText(av)
-            if "Kaspersky" in av:
-                self.input_av.setStyleSheet("color: #000000; background-color: #d4edda; font-weight: bold;") # Verde suave
+            
+            # Lógica de semáforo para el Antivirus
+            if "No detectado" in av:
+                 # ROJO: Peligro total
+                 self.input_av.setStyleSheet("color: #000000; background-color: #f8d7da; font-weight: bold;") 
+            elif "Kaspersky" in av:
+                 # VERDE: Cumple el estándar de la empresa
+                 self.input_av.setStyleSheet("color: #000000; background-color: #d4edda; font-weight: bold;") 
             else:
-                 self.input_av.setStyleSheet("color: #000000; background-color: #f8d7da;") # Rojo suave
+                 # AZUL: Tiene antivirus (Defender, Eset, etc), está protegido.
+                 self.input_av.setStyleSheet("color: #000000; background-color: #cce5ff; font-weight: bold;")
         
         if self.input_uptime: self.input_uptime.setText(data.get("uptime", ""))
         
