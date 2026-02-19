@@ -1,0 +1,21 @@
+{
+    "net_gw": "192.168.0.1",
+    "mobo": "ASUSTeK COMPUTER INC. - PRIME B860M-A",
+    "uptime": "0 Días, 2 Hs, 52 Min",
+    "os": "Microsoft Windows 11 Pro - Ver: 10.0.26100",
+    "av": "Windows Defender",
+    "reboot": "✅ Estado Saludable",
+    "net_name": "TP-Link Wi-Fi 6 PCIe Adapter",
+    "net_ip": "192.168.0.50",
+    "domain": "WORKGROUP",
+    "disk": "💿 DISCO #1 : Corsair MP600 PRO LPX (SSD)\n   └── [C:] Libre: 408.94 / 930.55 GB (43.9%) ⭐ (SISTEMA)\n----------------------------------\n💿 DISCO #0 : ST1000DM010-2EP102 (HDD)\n   └── [D:] Libre: 367.22 / 931.51 GB (39.4%)\n----------------------------------",
+    "vga": "Parsec Virtual Display Adapter (0 GB) | NVIDIA GeForce RTX 5070 (12 GB)",
+    "net_dns": "8.8.8.8, 1.1.1.1",
+    "net_ping": "✅ Conectado a Internet",
+    "ram": "32 GB Total [ 16GB @ 5200MHz | 16GB @ 5200MHz ]",
+    "net_mac": "50-BB-B5-69-6D-00",
+    "net_speed": "866.7 Mbps",
+    "user": "EzequielDesktop\\chueco",
+    "cpu": "Intel(R) Core(TM) Ultra 7 265KF",
+    "fecha_auditoria": "2026-02-19 18:11:17"
+}

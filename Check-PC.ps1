@@ -108,29 +108,43 @@ $ahora = Get-Date
 $uptime = $ahora - $boot
 $uptimeStr = "$($uptime.Days) Días, $($uptime.Hours) Hs, $($uptime.Minutes) Min"
 
-# --- 9. SOFTWARE SEGURIDAD (UNIVERSAL) ---
+# --- 9. SOFTWARE SEGURIDAD (PRECISIÓN DE VERSIÓN) ---
 $avStatus = "No detectado"
 $detectedAVs = @()
 
-# Intento 1: Consultar al Centro de Seguridad (Funciona en Win 10/11 para Defender, Avast, etc.)
-try {
-    $wmiAV = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct -ErrorAction SilentlyContinue
-    foreach ($av in $wmiAV) {
-        $detectedAVs += $av.displayName
-    }
-} catch {}
+# 1. BUSQUEDA PRECISA EN REGISTRO (Para obtener Versión de Kaspersky/ESET)
+# Buscamos en 64bits y 32bits
+$paths = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*")
 
-# Intento 2: Si es un Windows Server o falló lo anterior, buscamos en el Registro (Para Kaspersky/Endpoint)
-if ($detectedAVs.Count -eq 0) {
-    $paths = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*")
-    $regAV = Get-ItemProperty $paths -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -like "*Kaspersky*" -or $_.DisplayName -like "*Endpoint Security*" -or $_.DisplayName -like "*Eset*" }
+# Filtramos por nombres clave de Antivirus corporativos
+$regAV = Get-ItemProperty $paths -ErrorAction SilentlyContinue | Where-Object { 
+    $_.DisplayName -like "*Kaspersky*" -or 
+    $_.DisplayName -like "*Endpoint Security*" -or 
+    $_.DisplayName -like "*ESET*" -or
+    $_.DisplayName -like "*McAfee*"
+}
+
+if ($regAV) {
     foreach ($k in $regAV) {
-        $detectedAVs += "$($k.DisplayName) (v$($k.DisplayVersion))"
+        # Si tiene versión, la mostramos. Si no, ponemos "?"
+        $ver = if ($k.DisplayVersion) { "v$($k.DisplayVersion)" } else { "" }
+        $detectedAVs += "$($k.DisplayName) $ver"
     }
 }
 
+# 2. FALLBACK A WMI (Si no encontramos los corporativos, buscamos Defender o genéricos)
+if ($detectedAVs.Count -eq 0) {
+    try {
+        $wmiAV = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct -ErrorAction SilentlyContinue
+        foreach ($av in $wmiAV) {
+            # WMI no suele dar versión, así que va solo el nombre
+            $detectedAVs += $av.displayName 
+        }
+    } catch {}
+}
+
+# Limpieza final y unión
 if ($detectedAVs.Count -gt 0) {
-    # Eliminamos duplicados y unimos
     $avStatus = ($detectedAVs | Select-Object -Unique) -join " | "
 }
 
